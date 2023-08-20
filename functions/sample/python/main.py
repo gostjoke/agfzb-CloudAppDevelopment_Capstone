@@ -17,7 +17,7 @@ def main(param_dict):
     Returns:
         _type_: _description_ TODO
     """
-
+    databaseName = "dealerships"
     try:
         client = Cloudant.iam(
             account_name=param_dict["COUCH_USERNAME"],
