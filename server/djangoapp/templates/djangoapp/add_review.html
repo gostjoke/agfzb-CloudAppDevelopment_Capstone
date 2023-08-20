@@ -10,7 +10,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
 </head>
-    <body>
-    <!--Add review form here -->
-    </body>
+<body>
+    {% include 'Navbar.html' %}
+    <header class="d-flex justify-content-between align-items-center p-2">
+        <h1>Add a review about <strong>{{dealership_details.full_name}}</strong></h1>
+    </header>
+    <main class="container">
+        <!--Add review form here -->
+        <form action="{% url 'dealerships:add_review' dealer_id=dealership_details.id %}" method="post">
+            <section class="form-group">
+                <label for="review">Enter the review content</label>
+                <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+            </section>
+            <section class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="purchasecheck" id="purchasecheck" onclick="toggle()">
+                <label class="form-check-label" for="purchasecheck">Has purchased a car from {{dealership_details.full_name}}</label>
+            </section>
+            <section id="cardetails" style="display: none;">
+                <section class="form-group">
+                    <label for="car">Select your car (model-make-year): </label>
+                    <select name="car" id="car" class="form-select">
+                        {% for car in cars %}
+                        <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
+                        {% endfor %}
+                    </select>
+                </section>
+                <section class="form-group">
+                    <label for="purchasedate">Select Your Purchase Date</label>
+                    <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate" 
+                            data-date-end-date="0d">
+                </section>
+            </section>
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">Submit Review</button>
+        </form>
+    </main>
+    <script type="text/javascript">
+        $('.date-own').datepicker({
+           format: 'mm/dd/yyyy'
+         });
+
+        function toggle() {
+            let checkbox = document.getElementById("purchasecheck");
+            let carDetails = document.getElementById("cardetails");
+
+            if (checkbox.checked){
+                carDetails.style.display = "block";
+            } else {
+                carDetails.style.display = "none";
+            }
+        }
+   </script>
+</body>
 </html>
